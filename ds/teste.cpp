@@ -22,6 +22,20 @@ void inserirInicio(Pessoa** lista, string nome, int idade, bool zika){
     *lista = novo;
 }
 
+int contarPessoas(Pessoa* lista, int* totalPessoas){
+    *totalPessoas = 0;
+    if(lista == NULL){
+        cout << "Nenhuma Pessoa Cadastrada\n";
+        return 0;
+    }
+    
+    while (lista!=NULL){
+        (*totalPessoas)++;
+        lista = lista->proximo;
+    }
+    return *totalPessoas;
+}
+
 void imprimirLista(Pessoa* lista){
     while(lista!=NULL){
         cout << "Nome: " << lista->nome << " " <<"Idade: " << lista->idade << " "
@@ -30,14 +44,28 @@ void imprimirLista(Pessoa* lista){
     }
 }
 
+void imprimirListaRecursiva(Pessoa* lista, int* totalPessoas){
+    if(*totalPessoas > 0 && lista != NULL){
+        cout << "Nome: " << lista->nome << " " <<"Idade: " << lista->idade << " "
+        << " É zika?: " << boolalpha << lista->zika << endl;
+        (*totalPessoas)--;
+        imprimirListaRecursiva(lista->proximo, totalPessoas);
+    }
+    
+}
+
 
 int main(){ 
     Pessoa* lista = NULL;
-
+    
     inserirInicio(&lista,"csrand",23,true);
     inserirInicio(&lista,"lucas",21,false);
     inserirInicio(&lista,"romario",50,true);
     imprimirLista(lista);
+    int totalPessoas = contarPessoas(lista, &totalPessoas);
+    cout << "O Total de Pessoas Cadastradas é: "<< totalPessoas << endl;
+    cout << endl;
+    imprimirListaRecursiva(lista, &totalPessoas);
 
     return 0;
 }
