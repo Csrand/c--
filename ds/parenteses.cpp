@@ -134,6 +134,35 @@ void Imprime_Fila(Fila *F, Item *ProxItem){
 		Imprime_Fila(F, ProxItem->Prox);	
 	}
 }
+int ProcessaParenteses(Fila *F){
+	Pilha P;
+	Item *ItemF;
+	int Ret = 1;
+	
+	Ini_Pilha(&P);
+	while(Fila_Vazia(F) == 0 && Ret == 1){ //retira da pilha e verifica se deve incluir na pilha ou comparar com o topo
+		ItemF = Desenfileira(F);
+		if (ItemF->Valor == '('){
+			Empilha(&P, ItemF->Valor);
+		}
+		else{ //')'
+			if (P.Tamanho > 0 && P.Topo->Valor == '('){
+				Desempilha(&P);	
+			}
+			else{ //Se n?o for fechamento dos par?nteses ou a pilha est? vazia, ? erro!!
+			    //cout << endl << "Gerou erro. Tamanho = " << P.Tamanho << ", valor na pilha = " << P.Topo->Valor << " e valor da fila = " << Item->Valor;
+				Ret = -1;
+			}
+		}
+	}
+	
+	if(P.Tamanho > 0 && Ret == 1){ //Se sobrou elementos na pilha, ? erro
+		//cout << endl << "Erro fora do loop!!";
+		Ret = -1;
+	}
+	
+	return Ret;
+}
 
 Pilha P;
 Fila F;
@@ -143,7 +172,7 @@ int main(){
 	
 	Ini_Fila(&F);
 	Ini_Pilha(&P);
-	
+	/*
 	Empilha(&P, '(');
 	Empilha(&P, '(');
 	Empilha(&P, ')');
@@ -152,13 +181,20 @@ int main(){
     Desempilha(&P);
     Elemento = Desempilha(&P);
     cout << "\nItem desempilhado: \n";
-    Imprime_Pilha(&P);
+    Imprime_Pilha(&P);*/
     
-	/*Enfileira(&F, '(');
 	Enfileira(&F, '(');
 	Enfileira(&F, ')');
+	Enfileira(&F, '(');
 	Enfileira(&F, ')');
     Imprime_Fila(&F, F.Inicio);
-	*/
+	cout << "\nItem desemfileirado\n";
+	Imprime_Fila(&F, F.Inicio);
+	if(ProcessaParenteses(&F) ==1){
+		cout << "\nPareteses ok!!!";
+	}
+	else{
+		cout << "erro parenteses";
+	}
 	return 0;
 }
